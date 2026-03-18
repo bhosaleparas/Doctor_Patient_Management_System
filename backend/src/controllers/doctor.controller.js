@@ -14,84 +14,18 @@ const generateToken = (doctorId) => {
 
 
 
-// const registerDoctor = async (req, res) => {
-//   try {
-//     const { username, email, name, password, specialization, cabin, fee, gender } = req.body;
-
-//     if (!username || !email || !name || !password || !specialization || !cabin || !fee || !gender) {
-//       return res.status(400).json({ message: 'All fields are required' });
-//     }
-
-//     //Check if email or username
-//     const existingDoctor = await prisma.doctor.findFirst({
-//       where: {
-//         OR: [{ email }, { username }]
-//       }
-//     });
-
-//     if (existingDoctor) {
-//       return res.status(409).json({
-//         message: existingDoctor.email === email
-//           ? 'Email already registered'
-//           : 'Username already taken'
-//       });
-//     }
-
-//     // Hash password
-//     const hashedPassword = await bcrypt.hash(password, 10);
-
-//     //Create doctor
-//     const doctor = await prisma.doctor.create({
-//       data: {
-//         username,
-//         email,
-//         name,
-//         password: hashedPassword,
-//         specialization,
-//         cabin,
-//         fee: parseFloat(fee),
-//         gender,
-//       }
-//     });
-
-//     // Return response
-//     const { password: _, ...doctorWithoutPassword } = doctor;
-
-//     res.status(201).json({
-//       message: 'Doctor registered successfully',
-//       data:{
-//         id:doctor.id,
-//         name:doctor.name,
-//         specialization:doctor.specialization,
-//         fee:doctor.fee,
-//         status:doctor.status
-
-//       }
-//     });
-
-//   } catch (error) {
-//     console.error('Doctor register error:', error.message);
-//     res.status(500).json({ message: 'Internal server error' });
-//   }
-// };
-
-
-
-
-
 const loginDoctor = async (req, res) => {
   try {
     const { username, password } = req.body;
 
     if (!username || !password) {
-      return res.status(400).json({ message: 'Email and password are required' });
+      return res.status(400).json({ message: 'Username and password are required' });
     }
 
     // Find doctor by email
     const doctor = await prisma.doctor.findUnique({
       where: { username }
     });
-
 
     if (!doctor) {
       return res.status(401).json({ message: 'Invalid email or password' });
@@ -124,8 +58,52 @@ const loginDoctor = async (req, res) => {
 
 
 
-const changePassword= async(req,res)=>{
+const changePasswordDoctor = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const doctorId = req.doctor.id; 
 
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: 'Current and new password are required' });
+    }
+
+    if (newPassword.length < 5) {
+      return res.status(400).json({ message: 'New password must be at least 5 characters' });
+    }
+
+    const doctor = await prisma.doctor.findUnique({
+      where: { id: doctorId }
+    });
+
+
+    const isMatch = await bcrypt.compare(currentPassword, doctor.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Current password is incorrect' });
+    }
+
+
+    const isSame = await bcrypt.compare(newPassword, doctor.password);
+    if (isSame) {
+      return res.status(400).json({ message: 'New password cannot be same as current password' });
+    }
+
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await prisma.doctor.update({
+      where: { id: doctorId },
+      data: { password: hashedPassword }
+    });
+
+    res.status(200).json({ message: 'Password changed successfully' });
+
+  } catch (error) {
+    console.error('Change password error:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 };
 
-export {loginDoctor}
+
+
+
+export {loginDoctor,changePasswordDoctor}

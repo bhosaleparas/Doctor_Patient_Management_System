@@ -99,9 +99,10 @@ const loginAdmin = async (req, res) => {
   }
 };
 
+
+
 const registerDoctor = async (req, res) => {
   try {
-    jwt.verify(req.token, process.env.JWT_SECRET);
     const {
       username,
       email,
@@ -148,7 +149,7 @@ const registerDoctor = async (req, res) => {
     }
 
     // Hash password
-    // const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     //Create doctor
     const doctor = await prisma.doctor.create({
@@ -156,14 +157,14 @@ const registerDoctor = async (req, res) => {
         username,
         email,
         name,
-        // password: hashedPassword,
-        password,
+        password: hashedPassword,
         specialization,
         cabin,
         fee: parseFloat(fee),
         gender,
       },
     });
+
 
     // Return response
     const { password: _, ...doctorWithoutPassword } = doctor;
@@ -181,5 +182,8 @@ const registerDoctor = async (req, res) => {
     res.status(403).json({ message: "Access Denied" });
   }
 };
+
+
+
 
 export { registerAdmin, loginAdmin, registerDoctor };
