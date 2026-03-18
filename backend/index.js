@@ -1,6 +1,9 @@
 import express from 'express';
 import { connectDb, disconnectDb } from './src/config/db.js';
 import userroutes from './src/routes/user.routes.js';
+import doctorroutes from './src/routes/doctor.routes.js'
+import adminroutes from './src/routes/admin.routes.js'
+
 
 const app = express();
 app.use(express.json());
@@ -14,6 +17,9 @@ app.get('/', (req, res) => {
 });
 
 app.use('/user', userroutes);
+app.use('/doctor', doctorroutes);
+app.use('/admin', adminroutes);
+
 
 app.listen(PORT, () => {
   console.log(`server listening running on port ${PORT}`);

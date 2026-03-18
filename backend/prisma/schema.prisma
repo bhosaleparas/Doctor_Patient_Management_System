@@ -16,7 +16,7 @@ datasource db {
 
 model Admin{
   id    Int     @id @default(autoincrement())
-  username      String
+  username      String     @unique
   password    String
   
 }
@@ -57,13 +57,15 @@ model Doctor {
 }
 
 
+
+
 model Appointment {
   id          Int       @id @default(autoincrement())
   userId      Int
   doctorId    Int
   name        String
   date        DateTime
-  slot        String     // Prisma doesn't have TIME type, store as string (HH:MM)
+  slot        String     
   status      String     @default("pending")
   patientAge  Int?
   createdAt   DateTime   @default(now())
@@ -72,3 +74,4 @@ model Appointment {
   user        User       @relation(fields: [userId], references: [id])
   doctor      Doctor     @relation(fields: [doctorId], references: [id])
 }
+
