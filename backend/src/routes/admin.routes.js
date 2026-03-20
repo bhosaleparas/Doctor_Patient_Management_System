@@ -8,9 +8,13 @@ const router=Router();
 
 
 // endpoints
-router.post('/register',registerAdmin);
-router.post('/login',loginAdmin);
-router.post('/register/doctor',Protectadmin,registerDoctor)
-router.post('/deactivate_dcotor/:id',Protectadmin,deactivateDoctor)
+
+// Admin authentication
+router.post('/register', registerAdmin);
+router.post('/login', loginAdmin);
+
+// Doctor management (protected)
+router.post('/doctors', Protectadmin, registerDoctor);
+router.patch('/doctors/:id/deactivate', Protectadmin, deactivateDoctor);
 
 export default router;

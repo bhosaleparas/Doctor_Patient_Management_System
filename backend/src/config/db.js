@@ -17,7 +17,6 @@ const connectDb = async () => {
   try {
     await prisma.$connect();
     console.log("Database connected");
-    console.log("Url loaded",!!process.env.DATABASE_URL);
   } catch (error) {
     console.error(`Database connection error: ${error.message}`);
     process.exit(1);
