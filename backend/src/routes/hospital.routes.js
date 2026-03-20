@@ -10,4 +10,5 @@ router.post('/create', createHospital);
 router.get('/all', getAllHospitals);   
 router.get('/:city',getHospitalsByCity);
 
+
 export default router;

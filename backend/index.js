@@ -23,6 +23,7 @@ app.use('/admin', adminroutes);
 app.use('/hospital',hospitalroutes);
 
 
+
 app.listen(PORT, () => {
   console.log(`server listening running on port ${PORT}`);
 });

@@ -122,4 +122,5 @@ const deactivateDoctor = async (req, res) => {
   }
 };
 
+
 export {registerDoctor, deactivateDoctor };

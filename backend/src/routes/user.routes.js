@@ -25,7 +25,4 @@ router.post('/book', protectUser, bookSlot); // pass doctorId + slotId in body
 router.patch('/cancel-appointment/:id', protectUser, cancelAppointment);
 router.get('/my-appointments', protectUser, getUserAppointments);
 
-
-router.get("/my-appointments",protectUser,getUserAppointments);
-
 export default router;
