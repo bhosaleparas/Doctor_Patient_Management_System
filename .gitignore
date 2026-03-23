@@ -1,5 +1,6 @@
 # dependencies
 backend/node_modules/
+frontend/node_modules/
 prisma/
 prisma.config.ts
 # env files
