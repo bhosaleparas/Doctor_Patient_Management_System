@@ -1,9 +1,8 @@
 import { Router } from "express";
-import {searchDoctor,bookAppointment,getDoctorById,getUserAppointments,cancelAppointment} from "../controllers/user.controller.js";
+import {searchDoctor,getDoctorById,getUserAppointments,cancelAppointment} from "../controllers/user.controller.js";
 import { registerUser,loginUser} from '../controllers/auth/user.auth.controller.js'
 import { protectUser } from "../middleware/user.auth.js";
 import { getAvailableSlotsForUser,bookSlot } from "../controllers/slot.controller.js";
-import { protectDoctor } from "../middleware/doctor.auth.js";
 
 
 const router=Router();
@@ -23,5 +22,7 @@ router.get('/doctor/available/:doctorId', protectUser, getAvailableSlotsForUser)
 router.post('/book', protectUser, bookSlot); 
 router.patch('/cancel-appointment/:id', protectUser, cancelAppointment);
 router.get('/my-appointments', protectUser, getUserAppointments);
+router.get('hospital/:hospital_name/doctors',protectUser,searchDoctor);
+
 
 export default router;

@@ -22,6 +22,8 @@ const protectDoctor = async (req, res, next) => {
     
     console.log(doctor.email)
     console.log(doctor.hospitalId)
+    console.log(doctor.id)
+
     if (!doctor) {
       return res.status(401).json({ message: "Doctor not found" });
     }

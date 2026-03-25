@@ -14,9 +14,9 @@ const generateToken = (doctorId,hospitalId) => {
 // Login doctor
 const loginDoctor = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    if (!username || !password) {
+    if (!email || !password) {
       return res
         .status(400)
         .json({ message: "Username and password are required" });
@@ -24,7 +24,7 @@ const loginDoctor = async (req, res) => {
 
     // Find doctor by username
     const doctor = await prisma.doctor.findUnique({
-      where: { username },
+      where: { email },
     });
 
 
@@ -43,12 +43,13 @@ const loginDoctor = async (req, res) => {
     const token = generateToken(doctor.id,doctor.hospitalId);
 
 
-    // Return doctor data without password
+    // Return doctor data without password to frontend
     const { password: _, ...doctorWithoutPassword } = doctor;
 
     res.status(200).json({
       message: "Login successful",
-      token
+      token,
+      doctor
     });
   } catch (error) {
     console.error("Doctor login error:", error.message);

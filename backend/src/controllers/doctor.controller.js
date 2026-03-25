@@ -55,45 +55,49 @@ const changePasswordDoctor = async (req, res) => {
 // doctorAppointments,completeAppointment
 const doctorAppointments = async (req, res) => {
   try {
-    const doctorId = req.doctor.id; //from protected doctor
+    const doctorId = req.doctor.id;
 
-    const { date, status } = req.body;
+    const { date, status } = req.query;
 
     const search = { doctorId };
 
     if (date) {
-      search.date = new Date(date); // add date to search object
+      const parsedDate = new Date(date);
+      if (isNaN(parsedDate.getTime())) {
+        return res.status(400).json({ message: "Invalid date format. Use YYYY-MM-DD" });
+      }
+      search.date = parsedDate;
     }
 
     if (status) {
-      const validateStatus = ["pending", "completed", "cancelled"];
+      const validateStatus = ["pending", "completed", "cancelled", "no_show"];
       if (!validateStatus.includes(status)) {
-        return res
-          .status(400)
-          .json({ message: "Status must be pending, completed or cancelled" });
+        return res.status(400).json({
+          message: "Status must be pending, completed, cancelled or no_show"
+        });
       }
       search.status = status;
     }
 
     const appointments = await prisma.appointment.findMany({
-      where:{id:parseInt(doctorId)},
+      where  : search,
       orderBy: [{ date: "asc" }, { slot: { startTime: "asc" } }],
       include: {
         user: {
           select: {
-            name: true,
-            email: true,
-            phone: true,
+            name  : true,
+            email : true,
+            phone : true,
             gender: true,
-          },
+          }
         },
         slot: {
           select: {
             startTime: true,
-            endTime: true,
-          },
-        },
-      },
+            endTime  : true,
+          }
+        }
+      }
     });
 
     const formatted = appointments.map(a => ({
@@ -111,9 +115,8 @@ const doctorAppointments = async (req, res) => {
       appointments: formatted
     });
 
-
   } catch (error) {
-    console.log("Something wrong", error.message);
+    console.error("Doctor appointments error:", error.message);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -166,7 +169,7 @@ const markAppointmentCompleted = async (req, res) => {
 
     if (slotDateTime > now) {
       return res.status(400).json({
-        message: `Cannot mark as completed before appointment ends at ${appointment.slot.endTime}`
+        message: `Cannot mark as completed before appointment ends at  ${appointment.slot.endTime} on ${appointment.date.toDateString()}`
       });
     }
 
@@ -200,4 +203,62 @@ const markAppointmentCompleted = async (req, res) => {
 
 
 
-export { changePasswordDoctor,doctorAppointments,markAppointmentCompleted };
+//mark appointment no show
+const markNoShow = async (req, res) => {
+  try {
+    const doctorId = req.doctor.id;
+    const { id }   = req.params;
+
+    const appointment = await prisma.appointment.findUnique({
+      where  : { id: parseInt(id) },
+      include: { slot: { select: { endTime: true, date: true } } }
+    });
+
+    if (!appointment)                        return res.status(404).json({ message: 'Appointment not found' });
+    if (appointment.doctorId !== doctorId)   return res.status(403).json({ message: 'Not authorized' });
+    if (appointment.status !== 'pending')    return res.status(400).json({ message: `Cannot mark as no show — already ${appointment.status}` });
+
+    const now         = new Date();
+    const slotEnd     = new Date(appointment.slot.date);
+    const [h, m]      = appointment.slot.endTime.split(':').map(Number);
+    slotEnd.setHours(h, m, 0, 0);
+
+    if (slotEnd > now) {
+      return res.status(400).json({ message: `Cannot mark no show before slot ends at ${appointment.slot.endTime}` });
+    }
+
+    await prisma.appointment.update({
+      where: { id: parseInt(id) },
+      data : { status: 'no_show' }
+    });
+
+    res.status(200).json({ message: 'Marked as no show' });
+  } catch (error) {
+    console.error('No show error:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+//doctor profile
+const getDoctorProfile = async (req, res) => {
+  try {
+    const doctor = await prisma.doctor.findUnique({
+      where : { id: req.doctor.id },
+      select: {
+        id: true, name: true, email: true,
+        username: true, specialization: true,
+        cabin: true, fee: true, gender: true,
+        status: true,
+        hospital: { select: { id: true, name: true, city: true, slug: true } }
+      }
+    });
+    res.status(200).json({ doctor });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+
+export { changePasswordDoctor,doctorAppointments,markAppointmentCompleted, markNoShow,getDoctorProfile };

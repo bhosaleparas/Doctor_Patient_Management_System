@@ -1,8 +1,8 @@
 import { Router } from "express";
-import {changePasswordDoctor,doctorAppointments,markAppointmentCompleted } from "../controllers/doctor.controller.js";
+import {changePasswordDoctor, doctorAppointments, markAppointmentCompleted, markNoShow, getDoctorProfile } from "../controllers/doctor.controller.js";
 import {protectDoctor} from '../middleware/doctor.auth.js'
 import {loginDoctor} from '../controllers/auth/doctor.auth.controller.js'
-import { setAvailability,getDoctorSlots } from "../controllers/slot.controller.js";
+import { setAvailability, getDoctorSlots, blockSlot, unblockSlot } from "../controllers/slot.controller.js";
 
 
 const router=Router();
@@ -21,5 +21,12 @@ router.patch('/appointments/:id/complete', protectDoctor, markAppointmentComplet
 // Availability
 router.post('/availability', protectDoctor, setAvailability);
 router.get('/slots', protectDoctor, getDoctorSlots);
+
+// slot 
+router.patch('/block',protectDoctor,blockSlot);
+router.patch('/unblock',protectDoctor,unblockSlot);
+
+router.patch('/appointments/:id/no-show', protectDoctor, markNoShow);  
+router.get('/profile',protectDoctor, getDoctorProfile); 
 
 export default router;

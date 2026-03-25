@@ -92,16 +92,19 @@ const loginUser = async (req, res) => {
 
     const token = generateToken(user.id);
 
+    //remove password
+    const { password: _, ...userWithoutPassword } = user;
+
     res.status(200).json({
       message: "Login successful",
       token,
+      user: userWithoutPassword,   //send user data to frontend
     });
+
   } catch (error) {
     console.error("Login error:", error.message);
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
-
 
 export {registerUser,loginUser};

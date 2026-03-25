@@ -1,15 +1,18 @@
 import { Routes, Route } from "react-router-dom";
-import NavScrollExample from "./components/common/Navbar";
-import Test from "./components/common/Test";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'flowbite';
+import NavbarComponent from "./components/common/NavbarComponent";
+import Test from "./components/common/Test"
+// import Component from "./components/common/Component";
+
+import './index.css'
+
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<NavScrollExample />} />
+        <Route path="/" element={<NavbarComponent/>} />
         <Route path="/test1" element={<Test />} />
+        {/* <Route path="/test2" element={<Component/>}/> */}
       </Routes>
     </>
   );

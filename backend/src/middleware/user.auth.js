@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import { prisma } from "../config/db.js";
 
 
+
 // middleware for protected user routes
 const protectUser = async (req, res, next) => {
   try {

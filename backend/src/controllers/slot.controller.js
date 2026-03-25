@@ -137,6 +137,8 @@ const getDoctorSlots = async (req, res) => {
   }
 };
 
+
+// slots for user
 const getAvailableSlotsForUser = async (req, res) => {
   try {
     const { doctorId } = req.params;
@@ -167,6 +169,7 @@ const getAvailableSlotsForUser = async (req, res) => {
     console.error("Get available slots error:", error.message);
     res.status(500).json({ message: "Internal server error" });
   }
+
 };
 
 // User can book slot
@@ -175,10 +178,10 @@ const bookSlot = async (req, res) => {
     const userId = req.user.id; // from protectUser middleware
     const { slotId, name, patientAge } = req.body;
 
-    if (!slotId || !name || !patientAge) {
+    if (!slotId || !name  ) {
       return res
         .status(400)
-        .json({ message: "slotId or name or patientAge are required" });
+        .json({ message: "slotId or name are required" });
     }
 
     // find slot
@@ -261,4 +264,110 @@ const bookSlot = async (req, res) => {
   }
 };
 
-export { setAvailability, getDoctorSlots, getAvailableSlotsForUser, bookSlot };
+
+// Doctor can block a slot
+const blockSlot = async (req, res) => {
+  try {
+    const doctorId = req.doctor.id;
+    const { slotId } = req.body;
+    console.log(slotId);
+
+    if (!slotId) {
+      return res.status(400).json({ message: "slotId is required" });
+    }
+
+    // find slot
+    const slot = await prisma.slot.findUnique({
+      where: { id: parseInt(slotId) },
+    });
+
+    if (!slot) {
+      return res.status(404).json({ message: "Slot not found" });
+    }
+
+    // check slot belongs to doctor or not
+    if (slot.doctorId !== doctorId) {
+      return res.status(403).json({ message: "Unauthorized action" });
+    }
+
+    // don't block booked slot
+    if (slot.isBooked) {
+      return res.status(400).json({
+        message: "Cannot block a booked slot",
+      });
+    }
+
+    // check if slot is already blocked or not
+    if (slot.isBlocked) {
+      return res.status(400).json({
+        message: "Slot is already blocked",
+      });
+    }
+
+    // Block slot
+    const updatedSlot = await prisma.slot.update({
+      where: { id: slot.id },
+      data: { isBlocked: true },
+    });
+
+    res.status(200).json({
+      message: "Slot blocked successfully",
+      slot: updatedSlot,
+    });
+  } catch (error) {
+    console.error("Block slot error:", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+// doctor can unblock the slot
+const unblockSlot = async (req, res) => {
+  try {
+    const doctorId = req.doctor.id;
+    const { slotId } = req.body;
+
+    if (!slotId) {
+      return res.status(400).json({ message: "slotId is required" });
+    }
+
+
+    //find the slot
+    const slot = await prisma.slot.findUnique({
+      where: { id: parseInt(slotId) },
+    });
+
+    if (!slot) {
+      return res.status(404).json({ message: "Slot not found" });
+    }
+
+    if (slot.doctorId !== doctorId) {
+      return res.status(403).json({ message: "Unauthorized action" });
+    }
+
+    //check if slot blocked or not
+    if (!slot.isBlocked) {
+      return res.status(400).json({
+        message: "Slot is not blocked",
+      });
+    }
+
+    //update slot status 
+    const updatedSlot = await prisma.slot.update({
+      where: { id: slot.id },
+      data: { isBlocked: false },
+    });
+
+    res.status(200).json({
+      message: "Slot unblocked successfully",
+      slot: updatedSlot,
+    });
+  } catch (error) {
+    console.error("Unblock slot error:", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+
+export { setAvailability, getDoctorSlots, getAvailableSlotsForUser, bookSlot, blockSlot, unblockSlot };

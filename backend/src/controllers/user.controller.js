@@ -2,36 +2,55 @@ import bcrypt from "bcrypt";
 import { prisma } from "../config/db.js";
 import jwt from "jsonwebtoken";
 
-
-
 // search Doctor
 const searchDoctor = async (req, res) => {
   try {
-    const { name, specialization } = req.query;
+    const { name, specialization, gender, minFee, maxFee } = req.query;
+    
+    const {hospital_name}=req.params;
+
+    const where = { status: true };
+
+    if (name) {
+      where.OR = [
+        { name: { contains: name, mode: "insensitive" } },
+        { specialization: { contains: name, mode: "insensitive" } },
+      ];
+    }
+
+    if (specialization) {
+      where.specialization = { contains: specialization, mode: "insensitive" };
+    }
+
+    if (gender) where.gender = gender;
+
+    if (minFee || maxFee) {
+      where.fee = {};
+      if (minFee) where.fee.gte = parseFloat(minFee);
+      if (maxFee) where.fee.lte = parseFloat(maxFee);
+    }
 
     const doctors = await prisma.doctor.findMany({
-      where: {
-        name: name ? { contains: name } : undefined,
-        specialization: specialization ? { contains: specialization } : undefined,
-      },
+      where,
       select: {
         id: true,
         name: true,
-        // email: true,
         specialization: true,
-        // cabin: true,
-        // fee: true,
-        // gender: true,
+        cabin: true, 
+        fee: true, 
+        gender: true, 
         status: true,
         hospital: {
-        select: {
-          name: true
-        }
-      }
-      }
+          select: { name: true, city: true }, 
+        },
+      },
+      orderBy: { name: "asc" },
     });
 
-    res.json(doctors);
+    res.status(200).json({
+      total: doctors.length,
+      doctors,
+    });
   } catch (error) {
     console.error("Search doctor error:", error.message);
     res.status(500).json({ message: "Internal server error" });
@@ -64,39 +83,27 @@ const getDoctorById = async (req, res) => {
             name: true,
             city: true,
             address: true,
-            phone: true
-          }
-        }
-      }
+            phone: true,
+          },
+        },
+      },
     });
 
     if (!doctor) {
-      return res.status(404).json({ message: `Doctor with ID ${id} not found` });
+      return res
+        .status(404)
+        .json({ message: `Doctor with ID ${id} not found` });
     }
 
     res.status(200).json({
       message: "Doctor details fetched successfully",
-      doctor
+      doctor,
     });
-
   } catch (error) {
     console.error("Get doctor by ID error:", error.message);
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
-
-
-
-const bookAppointment=async(req,res)=>{
-
-};
-
-
-const viewSlot=async(req,res)=>{
-
-};
-
 
 const getUserAppointments = async (req, res) => {
   try {
@@ -104,55 +111,51 @@ const getUserAppointments = async (req, res) => {
 
     const appointments = await prisma.appointment.findMany({
       where: { userId },
-      orderBy: { date: 'desc' },
+      orderBy: { date: "desc" },
       include: {
         doctor: {
-          select: { name: true, specialization: true, cabin: true, fee: true }
+          select: { name: true, specialization: true, cabin: true, fee: true },
         },
         slot: {
-          select: { startTime: true, endTime: true }
-        }
-      }
+          select: { startTime: true, endTime: true },
+        },
+      },
     });
 
-    const formatted = appointments.map(a => ({
+    const formatted = appointments.map((a) => ({
       id: a.id,
       name: a.name,
       date: a.date,
       slot: `${a.slot.startTime} - ${a.slot.endTime}`,
       status: a.status,
       patientAge: a.patientAge,
-      doctor: a.doctor
+      doctor: a.doctor,
     }));
 
     res.status(200).json({
       total: formatted.length,
-      appointments: formatted
+      appointments: formatted,
     });
-
   } catch (error) {
-    console.error('Get user appointments error:', error.message);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Get user appointments error:", error.message);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
-
-
-
 
 // cancel appointment for user
 const cancelAppointment = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { id } = req.params;   //apointment id
+    const { id } = req.params; //apointment id
 
     //Find appointment with slot
     const appointment = await prisma.appointment.findUnique({
       where: { id: parseInt(id) },
       include: {
         slot: {
-          select: { startTime: true, endTime: true }
-        }
-      }
+          select: { startTime: true, endTime: true },
+        },
+      },
     });
 
     if (!appointment) {
@@ -170,10 +173,10 @@ const cancelAppointment = async (req, res) => {
     }
 
     if (appointment.status === "completed") {
-      return res.status(400).json({ message: "Cannot cancel a completed appointment" });
+      return res
+        .status(400)
+        .json({ message: "Cannot cancel a completed appointment" });
     }
-
-    
 
     const appointmentDate = new Date(appointment.date);
     const [hours, minutes] = appointment.slot.startTime.split(":").map(Number);
@@ -183,17 +186,18 @@ const cancelAppointment = async (req, res) => {
 
     const now = new Date();
 
-    
     // Difference in milliseconds → convert to hours
     const diffInMs = appointmentDate.getTime() - now.getTime();
     const diffInHours = diffInMs / (1000 * 60 * 60);
 
-
     //Appointment Must be more than 2 hours away to cancel
     if (diffInHours <= 2) {
       return res.status(400).json({
-        message: `Cancellation not allowed. Appointment is in ${ diffInHours <= 0 ? "the past"
-            : `${Math.floor(diffInHours)}h ${Math.round((diffInHours % 1) * 60)}m` }. Must cancel at least 2 hours before.`
+        message: `Cancellation not allowed. Appointment is in ${
+          diffInHours <= 0
+            ? "the past"
+            : `${Math.floor(diffInHours)}h ${Math.round((diffInHours % 1) * 60)}m`
+        }. Must cancel at least 2 hours before.`,
       });
     }
 
@@ -201,18 +205,17 @@ const cancelAppointment = async (req, res) => {
     await prisma.$transaction([
       prisma.appointment.update({
         where: { id: parseInt(id) },
-        data: { status: "cancelled" }
+        data: { status: "cancelled" },
       }),
       prisma.slot.update({
         where: { id: appointment.slotId },
-        data: { isBooked: false }    // make slot free
-      })
+        data: { isBooked: false }, // make slot free
+      }),
     ]);
 
     res.status(200).json({
-      message: "Appointment cancelled successfully"
+      message: "Appointment cancelled successfully",
     });
-
   } catch (error) {
     console.error("Cancel appointment error:", error.message);
     res.status(500).json({ message: "Internal server error" });
@@ -220,4 +223,4 @@ const cancelAppointment = async (req, res) => {
 };
 
 
-export {searchDoctor,getDoctorById,bookAppointment,cancelAppointment,viewSlot,getUserAppointments};
+export { searchDoctor, getDoctorById, cancelAppointment, getUserAppointments };
