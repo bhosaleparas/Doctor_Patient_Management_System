@@ -111,7 +111,12 @@ const loginAdmin = async (req, res) => {
     res.status(200).json({
       message: "Login successful",
       token,
-      admin: admin.username,
+      admin: {
+        id        : admin.id,
+        username  : admin.username,
+        hospitalId: admin.hospitalId,   
+        hospital  : admin.hospital, 
+      }
     });
     
   } catch (error) {

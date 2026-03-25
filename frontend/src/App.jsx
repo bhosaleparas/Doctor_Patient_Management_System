@@ -1,21 +1,13 @@
-import { Routes, Route } from "react-router-dom";
-import NavbarComponent from "./components/common/NavbarComponent";
-import Test from "./components/common/Test"
-// import Component from "./components/common/Component";
+import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from './context/Authcontext';
+import AppRoutes         from './routes/AppRoutes';
 
-import './index.css'
-
-
-function App() {
-  return (
-    <>
-      <Routes>
-        <Route path="/" element={<NavbarComponent/>} />
-        <Route path="/test1" element={<Test />} />
-        {/* <Route path="/test2" element={<Component/>}/> */}
-      </Routes>
-    </>
-  );
-}
+const App = () => (
+  <BrowserRouter>
+    <AuthProvider>
+      <AppRoutes />
+    </AuthProvider>
+  </BrowserRouter>
+);
 
 export default App;
