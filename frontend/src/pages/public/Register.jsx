@@ -7,20 +7,16 @@ import Alert from '../../components/common/Alert';
 import useAuth from '../../hooks/useAuth';
 import { registerUser } from '../../services/authService';
 
-
 const genderOptions = [
-  { value: 'M', label: 'Male' },
-  { value: 'F', label: 'Female' },
-  { value: 'O', label: 'Other' },
+  { value: 'Male', label: 'Male' },
+  { value: 'Female', label: 'Female' },
+  { value: 'Other', label: 'Other' },
 ];
-
 
 const defaultForm = {
   name: '', email: '', password: '', phone: '',
   dob: '', city: '', address: '', pincode: '', gender: '',
 };
-
-
 
 const Register = () => {
   const { login }   = useAuth();
@@ -67,7 +63,7 @@ const Register = () => {
               <Input
                 label="Email"
                 type="email"
-                placeholder="paras@example.com"
+                placeholder="abcd@example.com"
                 value={form.email}
                 onChange={(e) => handleChange('email', e.target.value)}
                 required
@@ -111,7 +107,7 @@ const Register = () => {
               />
               <Input
                 label="Pincode"
-                placeholder="411001"
+                placeholder="411079"
                 value={form.pincode}
                 onChange={(e) => handleChange('pincode', e.target.value)}
                 required

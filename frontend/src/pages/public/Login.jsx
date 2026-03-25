@@ -13,7 +13,6 @@ const roleConfig = {
   admin : { fn: loginAdmin,  key: 'admin',  nameKey: 'username' },
 };
 
-
 const Login = () => {
   const { login }    = useAuth();
   const navigate     = useNavigate();
@@ -25,7 +24,6 @@ const Login = () => {
   const isEmailLogin = role === 'user' || role === 'doctor';
 
   const handleChange = (field, value) => setForm((p) => ({ ...p, [field]: value }));
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,7 +41,7 @@ const Login = () => {
 
       login(userData, role, data.token);
 
-      // Redirect based on role
+      // redirect based on role
       if (role === 'user')   navigate('/dashboard');
       if (role === 'doctor') navigate('/doctor/dashboard');
       if (role === 'admin')  navigate('/admin/dashboard');
@@ -57,7 +55,7 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-white flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-       
+        {/* logo */}
         <div className="text-center mb-8">
           <span className="text-4xl">🏥</span>
           <h1 className="text-3xl font-bold text-gray-800 mt-2">MediBook</h1>
@@ -66,7 +64,6 @@ const Login = () => {
 
         <div className="card shadow-lg">
           
-          {/* roles */}
           <div className="flex gap-1 bg-gray-100 rounded-xl p-1 mb-6">
             {['user', 'doctor', 'admin'].map((r) => (
               <button
@@ -81,13 +78,12 @@ const Login = () => {
             ))}
           </div>
 
-
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             {isEmailLogin ? (
               <Input
                 label="Email"
                 type="email"
-                placeholder="you@example.com"
+                placeholder="abc@pqrs.com"
                 value={form.email}
                 onChange={(e) => handleChange('email', e.target.value)}
                 required
@@ -95,7 +91,7 @@ const Login = () => {
             ) : (
               <Input
                 label="Username"
-                placeholder="admin_username"
+                placeholder="Username"
                 value={form.username}
                 onChange={(e) => handleChange('username', e.target.value)}
                 required
@@ -104,7 +100,7 @@ const Login = () => {
             <Input
               label="Password"
               type="password"
-              placeholder="••••••••"
+              placeholder="Password"
               value={form.password}
               onChange={(e) => handleChange('password', e.target.value)}
               required
@@ -130,6 +126,5 @@ const Login = () => {
     </div>
   );
 };
-
 
 export default Login;
