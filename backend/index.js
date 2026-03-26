@@ -14,7 +14,7 @@ app.use(express.json());
 // Allow multiple origins (local + Netlify)
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://doctorpatientmanagement.netlify.app'
+  'https://hospital-doctor-patient.netlify.app'
 ];
 
 const corsOptions = {
