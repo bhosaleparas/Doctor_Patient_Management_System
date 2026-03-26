@@ -25,7 +25,7 @@ const DoctorList = () => {
     setError('');
     setSearched(true);
     try {
-      // Remove empty keys
+      // remove empty keys
       const params = Object.fromEntries(
         Object.entries(overrideFilters || filters).filter(([, v]) => v !== '')
       );

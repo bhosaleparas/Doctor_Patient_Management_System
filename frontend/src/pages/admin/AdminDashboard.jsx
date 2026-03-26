@@ -7,10 +7,12 @@ import useFetch from '../../hooks/useFetch';
 import useAuth from '../../hooks/useAuth';
 import { getAnalytics } from '../../services/adminService';
 
+
 const AdminDashboard = () => {
   const { user }          = useAuth();
   const { data, loading } = useFetch(getAnalytics);
   const overview          = data?.overview || {};
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -26,7 +28,7 @@ const AdminDashboard = () => {
       >
         {loading ? <Loader /> : (
           <>
-            {/* Stats */}
+            {/* stats */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <StatsCard title="Total Patients"      value={overview.totalPatients}      icon="🧑" color="blue" />
               <StatsCard title="Active Doctors"      value={overview.activeDoctors}      icon="👨‍⚕️" color="green" />
@@ -39,7 +41,7 @@ const AdminDashboard = () => {
               />
             </div>
 
-            {/* Quick links */}
+            {/* quick links */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[
                 { title: 'Manage Doctors', desc: 'Add, activate or deactivate doctors', to: '/admin/doctors', icon: '👨‍⚕️' },

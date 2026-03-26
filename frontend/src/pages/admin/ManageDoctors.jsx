@@ -14,7 +14,8 @@ const ManageDoctors = () => {
   const [showForm, setShowForm] = useState(false);
   const { data, loading, refetch } = useFetch(getAllDoctors);
 
-  // Handle both { doctors: [] } and { data: [] } response shapes
+
+  // handle both { doctors: [] } and { data: [] } response shapes
   const doctors = data?.doctors || data?.data || [];
 
   // hospitalId can be nested inside user object depending on your login response
@@ -32,7 +33,7 @@ const ManageDoctors = () => {
           </Button>
         }
       >
-        {/* Add doctor form */}
+        {/* add doctor form */}
         {showForm && (
           <div className="card mb-6">
             <h2 className="text-lg font-semibold text-gray-800 mb-5">Add New Doctor</h2>
@@ -49,7 +50,7 @@ const ManageDoctors = () => {
           </div>
         )}
 
-        {/* Doctors table */}
+        {/* doctors table */}
         <div className="card">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-lg font-semibold text-gray-800">All Doctors</h2>

@@ -5,6 +5,7 @@ import Loader from '../../components/common/Loader';
 import EmptyState from '../../components/common/EmptyState';
 import useFetch from '../../hooks/useFetch';
 import { getAnalytics } from '../../services/adminService';
+
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   LineChart, Line, CartesianGrid, Legend
@@ -25,7 +26,7 @@ const Analytics = () => {
       <Navbar />
       <PageWrapper title="Analytics" subtitle="Insights and booking statistics">
 
-        {/* Overview stats */}
+        {/* overview stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <StatsCard title="Total Patients"     value={overview.totalPatients}      icon="🧑"  color="blue" />
           <StatsCard title="Active Doctors"     value={overview.activeDoctors}      icon="👨‍⚕️" color="green" />
@@ -41,7 +42,7 @@ const Analytics = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-          {/* Line chart — appointments over time */}
+          {/* line chart — appointments over time */}
           <div className="card">
             <h2 className="text-lg font-semibold text-gray-800 mb-5">
               Appointments (Last 30 Days)
@@ -67,7 +68,7 @@ const Analytics = () => {
             )}
           </div>
 
-          {/* Bar chart — most booked specialty */}
+          {/* bar chart — most booked specialty */}
           <div className="card">
             <h2 className="text-lg font-semibold text-gray-800 mb-5">
               Most Booked Specialties
@@ -87,7 +88,7 @@ const Analytics = () => {
             )}
           </div>
 
-          {/* Bar chart — most booked doctors */}
+          {/* bar chart — most booked doctors */}
           <div className="card lg:col-span-2">
             <h2 className="text-lg font-semibold text-gray-800 mb-5">
               Most Booked Doctors
@@ -117,5 +118,6 @@ const Analytics = () => {
     </div>
   );
 };
+
 
 export default Analytics;

@@ -6,6 +6,7 @@ import Button from '../../components/common/Button';
 import useFetch from '../../hooks/useFetch';
 import { getDoctorById } from '../../services/userService';
 
+
 const DoctorDetail = () => {
   const { id }     = useParams();
   const navigate   = useNavigate();
@@ -22,10 +23,10 @@ const DoctorDetail = () => {
       <PageWrapper>
         <div className="max-w-2xl mx-auto">
           <div className="card shadow-md">
-            {/* Header */}
+            {/* header */}
             <div className="flex items-center gap-5 mb-6">
               <div className="w-20 h-20 rounded-2xl bg-primary-100 flex items-center justify-center text-4xl flex-shrink-0">
-                {doctor.gender === 'F' ? '👩‍⚕️' : '👨‍⚕️'}
+                {doctor.gender === 'Female' ? '👩‍⚕️' : '👨‍⚕️'}
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-gray-800">{doctor.name}</h1>
@@ -38,12 +39,12 @@ const DoctorDetail = () => {
               </div>
             </div>
 
-            {/* Details grid */}
+            {/* details grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
               {[
                 { label: 'Cabin',      value: doctor.cabin },
                 { label: 'Fee',        value: `₹${doctor.fee}` },
-                { label: 'Gender',     value: doctor.gender === 'M' ? 'Male' : 'Female' },
+                { label: 'Gender',     value: doctor.gender === 'Male' ? 'Male' : 'Female' },
                 { label: 'Status',     value: doctor.status ? '✅ Active' : '❌ Inactive' },
               ].map(({ label, value }) => (
                 <div key={label} className="bg-gray-50 rounded-xl px-4 py-3">
@@ -53,7 +54,7 @@ const DoctorDetail = () => {
               ))}
             </div>
 
-            {/* Book button */}
+            {/* book button */}
             <Button
               className="w-full"
               disabled={!doctor.status}

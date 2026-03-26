@@ -9,7 +9,9 @@ import Loader from '../../components/common/Loader';
 import { setAvailability, getDoctorSlots } from '../../services/doctorService';
 import { todayString } from '../../utils/formatDate';
 
+
 const defaultWindow = { startTime: '', endTime: '' };
+
 
 const ManageSlots = () => {
   const [date,        setDate]        = useState('');
@@ -21,20 +23,21 @@ const ManageSlots = () => {
   const [error,       setError]       = useState('');
   const [success,     setSuccess]     = useState('');
 
-  // Add a new time window row
+  // add a new time window row
   const addWindow = () => setWindows((prev) => [...prev, { ...defaultWindow }]);
 
-  // Remove a time window row
+  // remove a time window row
   const removeWindow = (idx) =>
     setWindows((prev) => prev.filter((_, i) => i !== idx));
 
-  // Update a specific window field
+  // update a specific window field
   const updateWindow = (idx, field, value) =>
     setWindows((prev) =>
       prev.map((w, i) => (i === idx ? { ...w, [field]: value } : w))
     );
 
-  // Generate slots
+
+  // generate slots
   const handleGenerate = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -43,7 +46,8 @@ const ManageSlots = () => {
     try {
       const res = await setAvailability({ date, timeWindows: windows });
       setSuccess(`${res.data.totalSlots} slots generated successfully!`);
-      // Refresh view
+
+      // refresh view
       setViewDate(date);
       const slotsRes = await getDoctorSlots({ date });
       setSlots(slotsRes.data?.slots || []);
@@ -54,7 +58,7 @@ const ManageSlots = () => {
     }
   };
 
-  // View slots for a date
+  // view slots for a date
   const handleViewSlots = async () => {
     if (!viewDate) return;
     setViewLoading(true);
@@ -77,7 +81,7 @@ const ManageSlots = () => {
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-          {/* Generate slots form */}
+          {/* generate slots form */}
           <div className="card">
             <h2 className="text-lg font-semibold text-gray-800 mb-5">Set Availability</h2>
             <form onSubmit={handleGenerate} className="flex flex-col gap-5">
@@ -90,7 +94,7 @@ const ManageSlots = () => {
                 required
               />
 
-              {/* Time windows */}
+              {/* time windows */}
               <div>
                 <label className="text-sm font-medium text-gray-700 block mb-2">
                   Time Windows
@@ -145,7 +149,7 @@ const ManageSlots = () => {
             </form>
           </div>
 
-          {/* View slots */}
+          {/* view slots */}
           <div className="card">
             <h2 className="text-lg font-semibold text-gray-800 mb-5">View Slots</h2>
             <div className="flex gap-3 mb-5">
@@ -158,7 +162,7 @@ const ManageSlots = () => {
               <Button onClick={handleViewSlots} loading={viewLoading}>View</Button>
             </div>
 
-            {/* Legend */}
+            
             <div className="flex gap-4 mb-4 text-xs">
               <span className="flex items-center gap-1">
                 <span className="w-3 h-3 rounded-full bg-green-400 inline-block" /> Open
@@ -182,5 +186,6 @@ const ManageSlots = () => {
     </div>
   );
 };
+
 
 export default ManageSlots;

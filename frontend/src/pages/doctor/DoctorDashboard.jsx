@@ -9,6 +9,8 @@ import useAuth from '../../hooks/useAuth';
 import { getDoctorAppointments } from '../../services/doctorService';
 import { todayString } from '../../utils/formatDate';
 
+
+
 const DoctorDashboard = () => {
   const { user } = useAuth();
   const { data, loading, refetch } = useFetch(() =>
@@ -31,7 +33,7 @@ const DoctorDashboard = () => {
           </Link>
         }
       >
-        {/* Stats */}
+        {/* stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <StatsCard title="Today's Total"  value={todayAppointments.length} icon="📋" color="blue" />
           <StatsCard title="Pending"        value={pending.length}           icon="🕐" color="yellow" />
@@ -39,7 +41,7 @@ const DoctorDashboard = () => {
           <StatsCard title="Cabin"          value={user?.cabin || '—'}       icon="🚪" color="teal" />
         </div>
 
-        {/* Today's appointments */}
+        {/* today's appointments */}
         <div className="card">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-xl font-semibold text-gray-800">Today's Appointments</h2>
@@ -55,5 +57,6 @@ const DoctorDashboard = () => {
     </div>
   );
 };
+
 
 export default DoctorDashboard;

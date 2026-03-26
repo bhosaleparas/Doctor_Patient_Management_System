@@ -8,12 +8,14 @@ import Select from '../../components/common/Select';
 import useFetch from '../../hooks/useFetch';
 import { getMyAppointments } from '../../services/userService';
 
+
 const statusOptions = [
   { value: 'pending',   label: 'Pending' },
   { value: 'completed', label: 'Completed' },
   { value: 'cancelled', label: 'Cancelled' },
   { value: 'no_show',   label: 'No Show' },
 ];
+
 
 const MyAppointments = () => {
   const [statusFilter, setStatusFilter] = useState('');
@@ -31,7 +33,7 @@ const MyAppointments = () => {
         title="My Appointments"
         subtitle="Your complete appointment history"
       >
-        {/* Filter */}
+        {/* filter */}
         <div className="flex items-center gap-4 mb-6">
           <div className="w-48">
             <Select

@@ -21,6 +21,6 @@ router.get('/analytics',Protectadmin,getAnalytics);
 
 
 router.patch('/doctors/:id/reactivate', Protectadmin, reactivateDoctor);  
-router.get('/users',                    Protectadmin, getAllUsers);         
+router.get('/users',Protectadmin, getAllUsers);         
 
 export default router;

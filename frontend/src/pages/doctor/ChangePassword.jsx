@@ -7,6 +7,7 @@ import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
 import { changePasswordDoctor } from '../../services/authService';
 
+
 const ChangePassword = () => {
   const navigate = useNavigate();
   const [form,    setForm]    = useState({ currentPassword: '', newPassword: '', confirm: '' });
@@ -57,7 +58,7 @@ const ChangePassword = () => {
               <Input
                 label="Current Password"
                 type="password"
-                placeholder="••••••••"
+                placeholder="Password"
                 value={form.currentPassword}
                 onChange={(e) => handleChange('currentPassword', e.target.value)}
                 required

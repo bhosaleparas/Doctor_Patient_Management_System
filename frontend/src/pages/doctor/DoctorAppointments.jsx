@@ -8,6 +8,7 @@ import Button from '../../components/common/Button';
 import Loader from '../../components/common/Loader';
 import { getDoctorAppointments } from '../../services/doctorService';
 
+
 const statusOptions = [
   { value: 'pending',   label: 'Pending' },
   { value: 'completed', label: 'Completed' },
@@ -45,7 +46,7 @@ const DoctorAppointments = () => {
         title="Appointments"
         subtitle="Filter and manage your patient appointments"
       >
-        {/* Filters */}
+        {/* filters */}
         <div className="card mb-6">
           <div className="flex flex-col sm:flex-row gap-4">
             <Input

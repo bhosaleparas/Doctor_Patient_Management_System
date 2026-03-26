@@ -9,6 +9,7 @@ import useFetch from '../../hooks/useFetch';
 import useAuth from '../../hooks/useAuth';
 import { getMyAppointments } from '../../services/userService';
 
+
 const UserDashboard = () => {
   const { user } = useAuth();
   const { data, loading, refetch } = useFetch(getMyAppointments);
@@ -31,7 +32,8 @@ const UserDashboard = () => {
           </Link>
         }
       >
-        {/* Stats */}
+      
+        {/* stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <StatsCard title="Total Appointments" value={appointments.length} icon="📋" color="blue" />
           <StatsCard title="Upcoming"           value={pending.length}      icon="🕐" color="yellow" />

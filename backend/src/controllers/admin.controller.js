@@ -141,7 +141,7 @@ const getAllDoctors = async (req, res) => {
 
     // get all doctors of admin hospital
     const doctors = await prisma.doctor.findMany({
-      where: { hospitalId: admin.hospitalId, status:true},
+      where: { hospitalId: admin.hospitalId},
       orderBy: { id: "asc" },
       select: {
         id: true,
@@ -225,7 +225,7 @@ const getAnalytics = async (req, res) => {
     });
 
     const cancellationRate = totalAppointments
-      ? ((cancelledAppointments / totalAppointments) * 100).toFixed(1) + "%"
+      ? ((cancelledAppointments / totalAppointments) * 100).toFixed(2) + "%"
       : "0%";
 
 
@@ -256,7 +256,6 @@ const getAnalytics = async (req, res) => {
       }))
       .sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    
       //most booked doctors
     const doctorBookings = await prisma.appointment.groupBy({
       by: ["doctorId"],

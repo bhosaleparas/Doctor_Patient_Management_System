@@ -1,27 +1,24 @@
-import { Link, useNavigate } from 'react-router-dom';
-import useAuth from '../../hooks/useAuth';
-
-
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 const navLinks = {
-  user  : [
-    { label: 'Dashboard',       to: '/dashboard' },
-    { label: 'Find Hospitals',  to: '/hospitals' },
-    { label: 'My Appointments', to: '/my-appointments' },
+  user: [
+    { label: "Dashboard", to: "/dashboard" },
+    { label: "Find Hospitals", to: "/hospitals" },
+    { label: "My Appointments", to: "/my-appointments" },
   ],
   doctor: [
-    { label: 'Dashboard',       to: '/doctor/dashboard' },
-    { label: 'Appointments',    to: '/doctor/appointments' },
-    { label: 'Manage Slots',    to: '/doctor/slots' },
-    { label: 'Change Password', to: '/doctor/password' },   
+    { label: "Dashboard", to: "/doctor/dashboard" },
+    { label: "Appointments", to: "/doctor/appointments" },
+    { label: "Manage Slots", to: "/doctor/slots" },
+    { label: "Change Password", to: "/doctor/password" }, // ← add
   ],
-  admin : [
-    { label: 'Dashboard', to: '/admin/dashboard' },
-    { label: 'Doctors',   to: '/admin/doctors' },
-    { label: 'Analytics', to: '/admin/analytics' },
+  admin: [
+    { label: "Dashboard", to: "/admin/dashboard" },
+    { label: "Doctors", to: "/admin/doctors" },
+    { label: "Analytics", to: "/admin/analytics" },
   ],
 };
-
 
 const Navbar = () => {
   const { user, role, logout } = useAuth();
@@ -29,7 +26,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate("/");
   };
 
   const links = navLinks[role] || [];
@@ -38,15 +35,15 @@ const Navbar = () => {
     <nav className="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
             <span className="text-2xl">🏥</span>
-            <span className="font-heading text-xl font-bold text-primary-700">MediBook</span>
+            <span className="font-heading text-xl font-bold text-primary-700">
+              MediBook
+            </span>
           </Link>
 
-
-          {/* Nav links*/}
+          {/* Nav links - desktop */}
           {user && (
             <div className="hidden md:flex items-center gap-1">
               {links.map((link) => (
@@ -61,14 +58,18 @@ const Navbar = () => {
             </div>
           )}
 
-
-          {/* right side */}
+          {/* Right side */}
           <div className="flex items-center gap-3">
             {user ? (
               <>
                 <span className="hidden sm:block text-sm text-gray-500">
-                  Hi, <span className="font-semibold text-gray-700">{user.name || user.username}</span>
-                  <span className="ml-1 text-xs text-primary-500 capitalize">({role})</span>
+                  Hi,{" "}
+                  <span className="font-semibold text-gray-700">
+                    {user.name || user.username}
+                  </span>
+                  <span className="ml-1 text-xs text-primary-500 capitalize">
+                    ({role})
+                  </span>
                 </span>
                 <button
                   onClick={handleLogout}
@@ -79,15 +80,27 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link to="/login"    className="text-sm font-medium text-gray-600 hover:text-primary-600">Login</Link>
-                <Link to="/register" className="btn-primary text-sm">Register</Link>
+                <Link
+                  to="/hospitals"
+                  className="hidden sm:block text-sm font-medium text-gray-600 hover:text-primary-600"
+                >
+                  Find Hospitals
+                </Link>
+                <Link
+                  to="/login"
+                  className="text-sm font-medium text-gray-600 hover:text-primary-600"
+                >
+                  Login
+                </Link>
+                <Link to="/register" className="btn-primary text-sm">
+                  Register
+                </Link>
               </>
             )}
           </div>
         </div>
 
-
-        {/* responsive nav links */}
+        {/* Mobile nav links */}
         {user && (
           <div className="md:hidden flex gap-1 pb-2 overflow-x-auto">
             {links.map((link) => (

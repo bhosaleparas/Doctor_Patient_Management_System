@@ -10,6 +10,7 @@ import Alert from '../../components/common/Alert';
 import useFetch from '../../hooks/useFetch';
 import { getHospitalBySlug, getHospitalDoctors } from '../../services/hospitalService';
 
+
 const defaultFilters = { name: '', specialization: '', gender: '', date: '' };
 
 const HospitalDetail = () => {
