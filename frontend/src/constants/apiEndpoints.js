@@ -32,6 +32,10 @@ export const API = {
   DOCTOR_APPOINTMENTS: `${BASE}/doctor/appointments`,
   MARK_COMPLETE      : (id) => `${BASE}/doctor/appointments/${id}/complete`,
   MARK_NO_SHOW       : (id) => `${BASE}/doctor/appointments/${id}/no-show`,
+  BLOCK_SLOT       : (id) => `${BASE}/doctor/slot/${id}/block`,
+  UNBLOCK_SLOT       : (id) => `${BASE}/doctor/slot/${id}/unblock`,
+
+
 
   // Doctor - Slots
   SET_AVAILABILITY: `${BASE}/doctor/availability`,

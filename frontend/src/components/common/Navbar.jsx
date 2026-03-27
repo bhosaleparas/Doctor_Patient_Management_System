@@ -80,21 +80,11 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link
-                  to="/hospitals"
-                  className="hidden sm:block text-sm font-medium text-gray-600 hover:text-primary-600"
-                >
-                  Find Hospitals
-                </Link>
-                <Link
-                  to="/login"
-                  className="text-sm font-medium text-gray-600 hover:text-primary-600"
-                >
-                  Login
-                </Link>
-                <Link to="/register" className="btn-primary text-sm">
-                  Register
-                </Link>
+                <Link to="/hospitals" className="text-sm text-slate-600  hover:text-primary-600 font-600 hidden sm:block">
+                Find Hospitals
+              </Link>
+              <Link to="/login"    className="btn-outline text-sm py-1.5 px-4">Login</Link>
+              <Link to="/register" className="btn-outline text-sm py-1.5 px-4 hover:text-primary-600" >Register</Link>
               </>
             )}
           </div>

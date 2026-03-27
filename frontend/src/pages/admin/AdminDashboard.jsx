@@ -6,13 +6,13 @@ import Loader from '../../components/common/Loader';
 import useFetch from '../../hooks/useFetch';
 import useAuth from '../../hooks/useAuth';
 import { getAnalytics } from '../../services/adminService';
+import { getAllUsers } from '../../services/adminService';
 
 
 const AdminDashboard = () => {
   const { user }          = useAuth();
   const { data, loading } = useFetch(getAnalytics);
   const overview          = data?.overview || {};
-
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -46,7 +46,7 @@ const AdminDashboard = () => {
               {[
                 { title: 'Manage Doctors', desc: 'Add, activate or deactivate doctors', to: '/admin/doctors', icon: '👨‍⚕️' },
                 { title: 'Analytics',      desc: 'Charts and booking insights',          to: '/admin/analytics', icon: '📊' },
-                { title: 'Patients',       desc: 'View all registered patients',          to: '/admin/dashboard', icon: '🧑' },
+                { title: 'Patients',       desc: 'View all registered patients',          to: '/admin/users', icon: '🧑' },
               ].map((item) => (
                 <Link key={item.to} to={item.to} className="card hover:shadow-md transition-shadow group">
                   <div className="text-3xl mb-3">{item.icon}</div>

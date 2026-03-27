@@ -2,7 +2,7 @@
 
 const generateSlots = (timeWindows) => {
   const slots = [];
-  const SLOT_DURATION = 20; 
+  const SLOT_DURATION = 30; 
 
   for (const window of timeWindows) {
     const { startTime, endTime } = window;

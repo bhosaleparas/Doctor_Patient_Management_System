@@ -269,7 +269,7 @@ const bookSlot = async (req, res) => {
 const blockSlot = async (req, res) => {
   try {
     const doctorId = req.doctor.id;
-    const { slotId } = req.body;
+    const slotId  = req.params.id; // slotId in query params
     console.log(slotId);
 
     if (!slotId) {
@@ -325,7 +325,7 @@ const blockSlot = async (req, res) => {
 const unblockSlot = async (req, res) => {
   try {
     const doctorId = req.doctor.id;
-    const { slotId } = req.body;
+    const slotId  = req.params.id;
 
     if (!slotId) {
       return res.status(400).json({ message: "slotId is required" });

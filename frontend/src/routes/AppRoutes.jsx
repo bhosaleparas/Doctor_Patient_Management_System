@@ -25,6 +25,7 @@ import ChangePassword     from '../pages/doctor/ChangePassword';
 import AdminDashboard from '../pages/admin/AdminDashboard';
 import ManageDoctors  from '../pages/admin/ManageDoctors';
 import Analytics      from '../pages/admin/Analytics';
+import ManageUsers from '../pages/admin/ManageUsers';
 
 // other
 import NotFound    from '../pages/NotFound';
@@ -66,6 +67,8 @@ const AppRoutes = () => {
       <Route path="/admin/dashboard" element={<RoleRoute allowedRole="admin"><AdminDashboard /></RoleRoute>} />
       <Route path="/admin/doctors"   element={<RoleRoute allowedRole="admin"><ManageDoctors /></RoleRoute>} />
       <Route path="/admin/analytics" element={<RoleRoute allowedRole="admin"><Analytics /></RoleRoute>} />
+      <Route path="/admin/users" element={<RoleRoute allowedRole="admin"><ManageUsers /></RoleRoute>} />
+
 
       {/* other */}
       <Route path="/unauthorized" element={<Unauthorized />} />

@@ -12,36 +12,23 @@ const Home = () => (
   <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-teal-50">
     <Navbar />
 
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-      <div className="inline-block bg-primary-100 text-primary-700 text-xs font-semibold px-3 py-1 rounded-full mb-6 tracking-wide uppercase">
-        Doctor–Patient Management System
+    <div className="max-w-4xl mx-auto px-4 py-20 text-center">
+        <h1 className="text-5xl font-extrabold text-slate-800 mb-4 leading-tight">
+          Book Doctor Appointments <br />
+          <span className="text-brand-600">Easily <span style={{ fontFamily: 'ui-sans-serif' }}>&</span> Quickly</span>
+        </h1>
+        <p className="text-lg text-slate-500 mb-8 max-w-xl mx-auto">
+          Find hospitals near you, browse doctors by specialty, and book appointments in minutes.
+        </p>
+        <div className="flex gap-3 justify-center">
+          <Link to="/hospitals" className="btn-outline px-8 py-3 text-base">
+            Find Hospitals
+          </Link>
+          <Link to="/register" className="btn-outline px-8 py-3 text-base">
+            Create Account
+          </Link>
+        </div>
       </div>
-      <h1 className="text-5xl sm:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-        Your health,<br />
-        <span className="text-primary-600">simplified.</span>
-      </h1>
-      <p className="text-lg text-gray-500 mb-10 max-w-xl mx-auto">
-        Book appointments with top doctors, manage your health records, and never miss a slot again.
-      </p>
-      <div className="flex flex-col sm:flex-row gap-4 justify-center">
-        <Link to="/register" className="btn-primary text-base px-8 py-3 rounded-2xl">
-          Get Started
-        </Link>
-        <Link to="/login" className="btn-outline text-base px-8 py-3 rounded-2xl">
-          Sign In
-        </Link>
-      </div>
-
-
-      <div className="mt-16 grid grid-cols-3 gap-6 max-w-md mx-auto">
-        {[['500+', 'Doctors'], ['10k+', 'Patients'], ['50k+', 'Appointments']].map(([num, label]) => (
-          <div key={label}>
-            <p className="text-2xl font-bold text-primary-700">{num}</p>
-            <p className="text-xs text-gray-400 mt-1">{label}</p>
-          </div>
-        ))}
-      </div>
-    </section>
 
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">

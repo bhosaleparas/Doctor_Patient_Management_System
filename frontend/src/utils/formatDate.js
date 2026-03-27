@@ -8,6 +8,7 @@ export const formatDate = (dateStr) => {
   });
 };
 
+
 // Format time: "09:00" → "9:00 AM"
 export const formatTime = (timeStr) => {
   if (!timeStr) return '—';

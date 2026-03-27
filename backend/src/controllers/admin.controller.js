@@ -363,19 +363,41 @@ const reactivateDoctor = async (req, res) => {
 // Get all users
 const getAllUsers = async (req, res) => {
   try {
+    const adminId  = req.admin.id; // assuming middleware sets this
+    console.log(adminId)
+
+    // get admin hospitalId
+    const admin = await prisma.admin.findUnique({
+      where: { id: adminId },
+      select: { hospitalId: true }
+    });
+
+    //  fetch users linked to that hospital
     const users = await prisma.user.findMany({
+      where: {
+        appointments: {
+          some: {
+            doctor: {
+              hospitalId: admin.hospitalId
+            }
+          }
+        }
+      },
       select: {
-        id       : true, name     : true,
-        email    : true, phone    : true,
-        city     : true, gender   : true,
-        createdAt: true
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        city: true,
+        gender: true,
       }
     });
+
     res.status(200).json({ total: users.length, users });
+
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
-
 
 export {registerDoctor, deactivateDoctor,getAllDoctors, getAnalytics, reactivateDoctor, getAllUsers };

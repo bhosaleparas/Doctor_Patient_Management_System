@@ -23,8 +23,8 @@ router.post('/availability', protectDoctor, setAvailability);
 router.get('/slots', protectDoctor, getDoctorSlots);
 
 // slot 
-router.patch('/block',protectDoctor,blockSlot);
-router.patch('/unblock',protectDoctor,unblockSlot);
+router.patch('/slot/:id/block',   protectDoctor, blockSlot)
+router.patch('/slot/:id/unblock', protectDoctor, unblockSlot)
 
 router.patch('/appointments/:id/no-show', protectDoctor, markNoShow);  
 router.get('/profile',protectDoctor, getDoctorProfile); 
