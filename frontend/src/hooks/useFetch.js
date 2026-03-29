@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 // Generic fetch hook
-// usage: const { data, loading, error, refetch } = useFetch(apiFn, params)
+// const { data, loading, error, refetch } = useFetch(apiFn, params)
 const useFetch = (apiFn, params = null, runOnMount = true) => {
   const [data,    setData]    = useState(null);
   const [loading, setLoading] = useState(false);

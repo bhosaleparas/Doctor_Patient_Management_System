@@ -26,6 +26,10 @@ const registerUser = async (req, res) => {
     if (!name || !email || !password || !phone || !dob || !gender || !city || !address || !pincode) {
       return res.status(400).json({ message: "All fields are required" });
     }
+    
+    if (!/^\d{10}$/.test(phone)) {
+      return res.status(400).json({ message: "Phone number must be 10 digits" });
+    }
 
     // Check for existing user
     const existingUser = await prisma.user.findUnique({ where: { email } });

@@ -13,13 +13,14 @@ const defaultWindow = { startTime: "", endTime: "" };
 
 const ManageSlots = () => {
   const [date, setDate] = useState("");
-  const [windows, setWindows] = useState([{ ...defaultWindow }]);
+  const [windows, setWindows] = useState([defaultWindow ]);
   const [slots, setSlots] = useState([]);
   const [viewDate, setViewDate] = useState("");
   const [loading, setLoading] = useState(false);
   const [viewLoading, setViewLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  
 
   // Add a new time window row
   const addWindow = () => setWindows((prev) => [...prev, { ...defaultWindow }]);
